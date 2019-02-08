@@ -9,7 +9,6 @@ class MondrianLine extends Component {
 
         const lineStyle = {
             zIndex: 0,
-            position: 'absolute',
             backgroundColor: 'black'
         };
 
@@ -17,19 +16,27 @@ class MondrianLine extends Component {
             this.direction = "horizontal";
             this.lineStyle = {
                 ...lineStyle,
+                position: 'absolute',
                 top: this.props.locY,
                 height: `${lineWidth}px`,
                 width: '100%'
             };
+            if ( this.props.line === "top" ) {
+                this.lineStyle.top -= lineWidth;
+            }
         }
         else {
             this.direction = "vertical";
             this.lineStyle = {
                 ...lineStyle,
+                position: 'fixed',
                 left: this.props.locX,
                 width: `${lineWidth}px`,
                 height: '100%'
             };
+            if ( this.props.line === "left" ) {
+                this.lineStyle.left -= lineWidth;
+            }
         }
 
     }

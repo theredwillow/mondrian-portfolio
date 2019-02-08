@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import MondrianLine from './MondrianLine';
 
-const lineWidth = 7;
 class MondrianBox extends Component {
 
     constructor(props) {
@@ -9,29 +8,27 @@ class MondrianBox extends Component {
         [this.locX, this.locY] = this.props.location;  
         [this.width, this.height] = this.props.size;
 
-        this.leftLine = React.createRef();
-        this.topLine = React.createRef();
-        this.box = React.createRef();
-        this.bottomLine = React.createRef();
-        this.rightLine = React.createRef();
+        this.state = {};
     }
 
     componentDidMount() {
-        if (this.box.current !== null) {
-            this.mondrianLines = (<>
-                <MondrianLine ref={this.leftLine} line="left" locX={this.locX} />
-                <MondrianLine ref={this.topLine} line="top" locY={this.locY} />
-                <MondrianLine ref={this.bottomLine} line="bottom" locY={this.locY + this.box.current.naturalHeight + lineWidth} />
-                <MondrianLine ref={this.rightLine} line="right" locX={this.locX + this.width + lineWidth} />
-            </>);
-        }
+        let boxStatus = this.refs.box.getBoundingClientRect();
+        this.setState({
+            mondrianLines:
+            (<>
+                <MondrianLine line="left" locX={boxStatus.left} />
+                <MondrianLine line="top" locY={boxStatus.top} />
+                <MondrianLine line="bottom" locY={boxStatus.top + boxStatus.height} />
+                <MondrianLine line="right" locX={boxStatus.left + boxStatus.width} />
+            </>)
+        });
     }
 
     render() {
 
         const boxStyle = {
-            left: `${this.locX + lineWidth}px`,
-            top: `${this.locY + lineWidth}px`,
+            left: this.locX,
+            top: this.locY,
             position: 'absolute',
             width: this.width,
             height: this.height,
@@ -43,8 +40,8 @@ class MondrianBox extends Component {
 
         return (
             <React.Fragment>
-                <div className="box" ref={this.box} style={boxStyle}>{this.props.children}</div>
-                {this.mondrianLines}
+                <div className="box" ref="box" style={boxStyle}>{this.props.children}</div>
+                {this.state.mondrianLines}
             </React.Fragment>
         );
 
